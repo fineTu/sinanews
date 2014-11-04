@@ -17,12 +17,12 @@ import sys
 # sys.setdefaultencoding("utf-8")
 class SinanewsSpider(Spider):
     target_list = []
-    name = u'getNews'
+    name = u'sinanews'
     allowed_domains = []
     start_urls = []
     def nextTarget(self):
         try:
-            self.conn = MySQLdb.connect(host="localhost", user="root", passwd="root", db="newsmetro", port=3306, charset="utf8")
+            self.conn = MySQLdb.connect(host="localhost", user="webmoudel", passwd="newsMetro01", db="newsmetro", port=3306, charset="utf8")
         except MySQLdb.Error,e:
             print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
