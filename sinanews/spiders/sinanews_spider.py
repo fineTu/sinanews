@@ -58,8 +58,8 @@ class SinanewsSpider(Spider):
             name = news.xpath('text()').extract()[0]
             link = news.xpath('@href').extract()[0]
             print name.encode('utf-8')
-            item['title'] = name.encode('utf-8')
-            item['link'] = link
+            item['text'] = name.encode('utf-8')
+            item['href'] = link
 
             items.append(item)
             log.msg("Appending item...", level='INFO')
@@ -100,7 +100,7 @@ class SinanewsSpider(Spider):
     def transJson(self,items):
         str = '['
         for i in items:
-            str += '{\"title\":\"'+i['title']+'\",\"link\":\"'+i['link']+'\"},'
+            str += '{\"text\":\"'+i['text']+'\",\"href\":\"'+i['href']+'\"},'
         str = str[0:-1]
         str += ']'
         # print '----------------->>>>> items String:'+str
