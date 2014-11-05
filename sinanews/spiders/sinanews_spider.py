@@ -45,7 +45,6 @@ class SinanewsSpider(Spider):
 
     def parse(self, response):
         res_body = response._get_body()
-        #print "--------------------->"+res_body
         md5 = hashlib.md5(res_body).hexdigest()
         #md5 = ''
         sel = Selector(response)
@@ -57,7 +56,6 @@ class SinanewsSpider(Spider):
 
             name = news.xpath('text()').extract()[0]
             link = news.xpath('@href').extract()[0]
-            print name.encode('utf-8')
             item['text'] = name.encode('utf-8')
             item['href'] = link
 
@@ -85,13 +83,11 @@ class SinanewsSpider(Spider):
         if count == 1:
             jsonStr = self.transJson(items)
             mValue = (jsonStr , time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), current_target['id'])
-            print '----------->>>> update!'+mValue.__str__()
             cur.execute('update target_mapping set items = %s , update_time=%s where target_id=%s', mValue)
 
         elif count==0:
             jsonStr = self.transJson(items)
             mValue = (current_target['id'], jsonStr , time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
-            # print '----------->>>> insert!'+mValue.__str__()
             cur.execute('insert into target_mapping(target_id,items,update_time) values(%s,%s,%s)', mValue)
 
         self.conn.commit()
@@ -103,5 +99,4 @@ class SinanewsSpider(Spider):
             str += '{\"text\":\"'+i['text']+'\",\"href\":\"'+i['href']+'\"},'
         str = str[0:-1]
         str += ']'
-        # print '----------------->>>>> items String:'+str
         return str
