@@ -10,6 +10,6 @@ from scrapy.item import Item,Field
 
 class SinanewsItem(Item):
     # define the fields for your item here like:
-    title = Field()
-    link = Field()
+    text = Field()
+    href = Field()
 
