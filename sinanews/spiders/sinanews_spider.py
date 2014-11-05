@@ -60,9 +60,9 @@ class SinanewsSpider(Spider):
             item['href'] = link
 
             items.append(item)
-            log.msg("Appending item...", level='INFO')
+            #log.msg("Appending item...", level='INFO')
 
-        log.msg("Appending done.", level='INFO')
+       	log.msg("Appending done.", level='INFO')
         self.updateInfo(md5, self.current_target, items)
         yield items
 
