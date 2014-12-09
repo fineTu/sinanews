@@ -10,6 +10,7 @@ import time
 
 from sinanews.items import SinanewsItem
 
+import redis
 import MySQLdb
 import sys
 
@@ -33,9 +34,11 @@ class SinanewsSpider(Spider):
             print t[2]
             yield {'id': t[0], 'url': t[3], 'xpath': t[5], 'regex': t[6],'md5': t[7], 'status': t[9]}
         cur.close()
+
     def __init__(self):
         self.target_list = self.nextTarget()
         self.current_target = ''
+        self.redis_conn = redis.Redis(host='127.0.0.1', port=6379)
         return
 
     def start_requests(self):
@@ -84,12 +87,11 @@ class SinanewsSpider(Spider):
             jsonStr = self.transJson(items)
             mValue = (jsonStr , time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())), current_target['id'])
             cur.execute('update target_mapping set items = %s , update_time=%s where target_id=%s', mValue)
-
         elif count==0:
             jsonStr = self.transJson(items)
             mValue = (current_target['id'], jsonStr , time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
             cur.execute('insert into target_mapping(target_id,items,update_time) values(%s,%s,%s)', mValue)
-
+        self.redis_conn.set('target:md5:'+current_target['id'], md5)
         self.conn.commit()
         return
 
