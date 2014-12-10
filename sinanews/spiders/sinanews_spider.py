@@ -91,7 +91,7 @@ class SinanewsSpider(Spider):
             jsonStr = self.transJson(items)
             mValue = (current_target['id'], jsonStr , time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
             cur.execute('insert into target_mapping(target_id,items,update_time) values(%s,%s,%s)', mValue)
-        self.redis_conn.set('target:md5:'+current_target['id'], md5)
+        self.redis_conn.set('target:md5:'+str(current_target['id']), md5)
         self.conn.commit()
         return
 
